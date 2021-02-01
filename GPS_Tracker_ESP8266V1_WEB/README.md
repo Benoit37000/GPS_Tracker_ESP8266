@@ -7,7 +7,7 @@ Il suffit de se connecter sur un smartphone, sans mot de passe, sur le réseau q
 
 ### Schéma de câblage
 
-<img src="../connections_BUZ_ACTIF.png" width = "700">
+<img src="../connections_BUZ_ACTIF.PNG" width = "700">
 
 
 <img src="Balise2.PNG" width = "600">
