@@ -31,7 +31,7 @@ Que l'on obtient après avoir ajouté l'URL https://arduino.esp8266.com/stable/p
 
 ### Câblage
 
-<img src="connections_BUZ_ACTIF.png" width = "700">
+<img src="connections_BUZ_ACTIF.PNG" width = "700">
 
 ### Face avant 
 
