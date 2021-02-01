@@ -34,7 +34,7 @@ Après connexion sans mot de passe, entrez l'adresse 192.168.1.10 dans Chrome ou
 
 ## Câblage
 
-<img src="../GPS_Tracker_ESP8266V1_WEB_FRSKY/cablage1.png" width = "700">
+<img src="connectionsnobuzzer.png" width = "700">
 
 <img src="Balise2.PNG" width = "500"> 
 
