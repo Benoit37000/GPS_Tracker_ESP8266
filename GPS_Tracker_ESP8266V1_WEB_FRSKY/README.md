@@ -10,9 +10,17 @@ Il suffira de renommer 0860 en HDOP et de mettre une Précision de 0.00 et de re
 
 <img src="screen-211200.bmp" width = "500">
 
-En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra afficher facilement les coordonnées GPS, le HDOP et le nombre de SAT
+Et de nenommer 0880
 
-<img src="screen-164043.bmp" width = "500">
+<img src="screen-2021-02-01-194948.bmp" width = "500">"
+
+En STAT
+
+<img src="screen-2021-02-01-195046.bmp" width = "500">
+
+En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra afficher facilement les coordonnées GPS, le HDOP, le nombre de SAT et le STATUS
+
+<img src="Capture Balise.PNG" width = "500">
 
 on le trouve ici https://github.com/dev-fred/GPS_Tracker_ESP8266/blob/main/GPS_Tracker_ESP8266V1_WEB_FRSKY/WIDGETS.zip
 
