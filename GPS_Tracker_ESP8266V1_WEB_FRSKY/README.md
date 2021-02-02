@@ -10,7 +10,7 @@ Il suffira de renommer 0860 en HDOP et de mettre une Précision de 0.00 et de re
 
 <img src="screen-211200.bmp" width = "500">
 
-Et de nenommer 0880
+Et de renommer 0880
 
 <img src="screen-2021-02-01-194948.bmp" width = "500">"
 
