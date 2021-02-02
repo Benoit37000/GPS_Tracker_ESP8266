@@ -13,7 +13,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 /*------------------------------------------------------------------------------
-  28/01/2021
+  02/02/2021
   Author: Fred.Dev
   Platforms: ESP8266
   Language: C++/Arduino
@@ -29,11 +29,10 @@
 #include <FrSkySportSingleWireSerial.h>
 #include <FrSkySportTelemetry.h>
 #include "FrSkySportSensorGps_Cust.h"
-//#define POLLING_ENABLED
+
 FrSkySportSensorGps_Cust gpsfrsky;     // Create GPS sensor with default ID
 FrSkySportTelemetry telemetry;
 #define SPORT_PIN FrSkySportSingleWireSerial::SOFT_SERIAL_PIN_D8 //frsky sport
-//
 
 #include <ESP8266WiFi.h>
 #include <SoftwareSerial.h>
@@ -83,7 +82,6 @@ uint8_t beaconPacket[MAX_BEACON_SIZE] = {
   /* 39 - 40 */ 0x00, 0x20,       // 39-40: SSID parameter set, 0x20:maxlength:content
 };
 
-
 // Ensure the AP SSID is max 31 letters
 // 31 lettres maxi selon l'api, 17 caractères de l'adresse mac, reste 15 pour ceux de la chaine du début moins le caractère de fin de chaine ça fait 14, 14+17=31
 static_assert((sizeof(prefixe_ssid)/sizeof(*prefixe_ssid))<=(14+1), "Prefix of AP SSID should be less than 14 letters");
@@ -101,6 +99,15 @@ ESP8266WebServer server(80);
 
 #define led_pin 2  //internal blue LED
 int led ;
+
+void flip_Led() {
+      //Flip internal LED
+      if (led == HIGH) {
+      digitalWrite(led_pin, led);
+      led = LOW;} else { 
+      digitalWrite(led_pin, led);
+      led= HIGH;}
+}
 
 #define GPS_BAUD_RATE 9600 //Valeur par défaut
 #define GPS_RX_PIN 5       //D1 Brancher le fil Tx du GPS
@@ -217,12 +224,36 @@ String Messages="init";
 unsigned  long _heures=0;
 unsigned  long _minutes=0;
 unsigned  long _secondes=0;
+const unsigned int limite_sat = 5;
+const float limite_hdop = 2.0;
+float _hdop = 0.0;
+unsigned int _sat = 0;
 float GPS[6];
 uint8_t Y=0,M=0,D=0,H=0,MN=0,S=0;
+uint8_t stat = 0;//status télémètrie
 
+/* Status Widget Balise
+ *  [0]  = "NO STAT",
+    [1]  = "NO GPS",
+    [2]  = "ATT SAT",
+    [3]  = "DEPART"
+ */
 void loop()
 {
   server.handleClient();
+  
+  // preparation telemetrie GPS
+  gpsfrsky.setData(GPS[1],GPS[2], // Latitude and longitude in degrees decimal (positive for N/E, negative for S/W)
+  GPS[3]-altitude_ref,            // Altitude in m (can be negative)
+  GPS[5],                         // Speed in m/s
+  GPS[4],                         // Course over ground in degrees (0-359, 0 = north)
+  Y,M,D,                          // Date (year - 2000, month, day)
+  H,MN,S,                         // Time (hour, minute, second) - will be affected by timezone setings in your radio
+  gps.hdop.hdop(),                // Hdop  
+  gps.satellites.value(),         // nb satellite
+  stat);                          // Status
+  //envoi telemetrie
+  telemetry.send(); 
   
   // Ici on lit les données qui arrivent du GPS et on les passe à la librairie TinyGPS++ pour les traiter
   while (softSerial.available())
@@ -231,6 +262,7 @@ void loop()
   if (millis() > 5000 && gps.charsProcessed() < 10) {
     Serial.println("NO GPS");
     strncpy(buff[8], "NO GPS", sizeof(buff[8]));
+    stat = 1; //"NO GPS"
     return;
   }
   // On traite le cas si la position GPS n'est pas valide
@@ -239,6 +271,9 @@ void loop()
       SV=gps.satellites.value();
       Serial.print("Waiting... SAT=");  Serial.println(SV);
       snprintf(buff[8], sizeof(buff[8]),"ATT SAT %u",SV);
+      stat = 2; //"ATT SAT"
+      //Flip internal LED
+      flip_Led();
       gpsMap = millis();
     }
     return;
@@ -259,8 +294,8 @@ void loop()
       Serial.print("LOST SAT="); Serial.println(nb_sat);
       strncpy(buff[8], "-SAT", sizeof(buff[8]));
     }
-    if (!drone_idfr.has_home_set() && gps.satellites.value() > 5 && gps.hdop.hdop() < 2.0) {    
-      //if (!drone_idfr.has_home_set() && gps.satellites.value() > 3 && gps.hdop.hdop() < 5.0) { //pour les tests rapides
+    if (!drone_idfr.has_home_set() && gps.satellites.value() > limite_sat && gps.hdop.hdop() < limite_hdop) {    
+      
       Serial.println("Setting Home Position");
       HLat=gps.location.lat(); HLng=gps.location.lng();
       drone_idfr.set_home_position(HLat, HLng, gps.altitude.meters());
@@ -268,6 +303,7 @@ void loop()
       snprintf(buff[11], sizeof(buff[11]), "DLNG:%.4f", HLng);
       snprintf(buff[12], sizeof(buff[12]), "DLAT:%.4f", HLat);
       strncpy(buff[10], "DEPART", sizeof(buff[10]));
+      stat = 3; //"PRET"
       D = gps.date.day();
       M = gps.date.month();   
       Y = gps.date.year()-2000;
@@ -294,8 +330,8 @@ void loop()
     MN = gps.time.minute();   
     S = gps.time.second();  
     snprintf(buff[1], sizeof(buff[1]), "UTC:%d:%d:%d",H,MN,S);
-    snprintf(buff[2], sizeof(buff[2]), "SAT:%u", gps.satellites.value());
-    snprintf(buff[3], sizeof(buff[3]), "HDOP:%.2f", gps.hdop.hdop());
+    _sat = gps.satellites.value(); if (_sat < limite_sat){snprintf(buff[2], sizeof(buff[2]), "--SAT:%u", _sat);}else{snprintf(buff[2], sizeof(buff[2]), "SAT:%u", _sat);}
+    _hdop = gps.hdop.hdop(); if (_hdop > limite_hdop){ snprintf(buff[3], sizeof(buff[3]), "++HDOP:%.2f", _hdop);}else{snprintf(buff[3], sizeof(buff[3]), "HDOP:%.2f", _hdop);}
     snprintf(buff[4], sizeof(buff[4]), "LNG:%.4f", GPS[1]);
     snprintf(buff[5], sizeof(buff[5]), "LAT:%.4f", GPS[2]);
     snprintf(buff[6], sizeof(buff[6]), "ALT:%.2f", GPS[3]-altitude_ref);
@@ -313,18 +349,6 @@ void loop()
     //*************************************************************
     
   }
-  
-    // preparation telemetrie GPS
-    gpsfrsky.setData(GPS[1],GPS[2], // Latitude and longitude in degrees decimal (positive for N/E, negative for S/W)
-    GPS[3]-altitude_ref,            // Altitude in m (can be negative)
-    GPS[5],                         // Speed in m/s
-    GPS[4],                         // Course over ground in degrees (0-359, 0 = north)
-    Y,M,D,                          // Date (year - 2000, month, day)
-    H,MN,S,                         // Time (hour, minute, second) - will be affected by timezone setings in your radio
-    gps.hdop.hdop(),                //Hdop   
-    gps.satellites.value());        //nb satellite                   
-    //envoi telemetrie
-    telemetry.send(); 
   
     /**
     * On regarde s'il est temps d'envoyer la trame d'identification drone : 
@@ -359,11 +383,7 @@ void loop()
     wifi_send_pkt_freedom(beaconPacket, to_send, 0);
     
     //Flip internal LED
-    if (led == HIGH) {
-      digitalWrite(led_pin, led);
-    led = LOW;} else
-    { digitalWrite(led_pin, led);
-    led= HIGH;}
+    flip_Led();
     
     //incrementation compteur de trame de balise envoyé
     TRBcounter++; 
