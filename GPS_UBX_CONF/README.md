@@ -5,7 +5,7 @@ Pour trouver la séquence d'octets liée à une fonction, on utilise les écrans
 En cliquant le bouton Show Hex Toggle ( avant dernier en bas à gauche ), on ouvre une fenêtre contenant les octets correspondant à une configuration
 ce bouton reste grisé si l'on accède aux écrans depuis "Config View".
 
-<img width = "600" src="Capture2.PNG" />
+<img width = "600" src="Capture1.PNG" />
 
 Exemple de séquence:
 RATES 500: B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77 
