@@ -89,9 +89,10 @@ IPAddress subnet(255, 255, 255, 0);
 ESP8266WebServer server(80);
 
 
-#define GPS_BAUD_RATE 9600  // Valeur par défaut
-#define GPS_RX_PIN 5       // Brancher le fil Tx du GPS
-#define GPS_TX_PIN 4       // Brancher le fil Rx du GPS
+#define GPS_9600 9600           // Valeur par défaut
+#define GPS_57600 57600         // Autre config possible du GPS
+#define GPS_RX_PIN 5            // D1 Brancher le fil Tx du GPS
+#define GPS_TX_PIN 4            // D2 Brancher le fil Rx du GPS
 
 
 #define ENABLE_BUZZER
@@ -181,6 +182,12 @@ void SelectChannels()
  sendPacket(packet, sizeof(packet));    
 }
 
+void BaudRate9600()
+{
+    byte packet[] = {0xB5,0x62, 0x06,0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x08, 0x00, 0x00, 0x80, 0x25, 0x00, 0x00, 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA2, 0xB5};
+    sendPacket(packet, sizeof(packet));
+}
+
 void Rate500()
 {     
   byte packet[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xF4, 0x01, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x77};
@@ -251,11 +258,17 @@ void setup()
   
   beginServer(); //lancement du server WEB
   
-  softSerial.begin(GPS_BAUD_RATE);
-    
-//-------Configure GPS ublox
+  //--------------------------------------------- 57600 ->BAUDRATE 9600
+    softSerial.begin(GPS_57600);
     delay(100); // Little delay before flushing.
     softSerial.flush();
+    Serial.println("GPS BAUDRATE 9600");
+    BaudRate9600();
+    delay(100); // Little delay before flushing.
+    softSerial.flush(); 
+    softSerial.begin(GPS_9600);
+    delay(100); // Little delay before flushing.
+    softSerial.flush();   
 //-------Config RATE = 500 ms
     Serial.println("Configure GPS RATE = 500 ms");
     Rate500();

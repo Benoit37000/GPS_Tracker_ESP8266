@@ -86,10 +86,10 @@ int led ;
 bool Wconnected=false;
 bool unefois=true;
 
-#define GPS_BAUDRATE 9600      // Valeur par défaut
-#define NEW_GPS_BAUDRATE 57600  //Config final du GPS
-#define GPS_RX_PIN 5            // Brancher le fil Tx du GPS
-#define GPS_TX_PIN 4            // Brancher le fil Rx du GPS
+#define GPS_9600 9600           // Valeur par défaut
+#define GPS_57600 57600         // Autre config possible du GPS
+#define GPS_RX_PIN 5            // D1 Brancher le fil Tx du GPS
+#define GPS_TX_PIN 4            // D2 Brancher le fil Rx du GPS
 
 SoftwareSerial softSerial(GPS_RX_PIN, GPS_TX_PIN);
 TinyGPSPlus gps;
@@ -255,25 +255,25 @@ void setup()
   webSocket.onEvent(webSocketEvent);
 
   //--------------------------------------------- 57600 ->BAUDRATE 9600
-    softSerial.begin(NEW_GPS_BAUDRATE);
+    softSerial.begin(GPS_57600);
     delay(100); // Little delay before flushing.
     softSerial.flush();
     Serial.println("BAUDRATE 9600");
     BaudRate9600();
     delay(100); // Little delay before flushing.
     softSerial.flush(); 
-    softSerial.begin(GPS_BAUDRATE);
+    softSerial.begin(GPS_9600);
     delay(100); // Little delay before flushing.
     softSerial.flush();   
 //--------------------------------------------- 9600 ->BAUDRATE 57600
-    softSerial.begin(GPS_BAUDRATE);
+    softSerial.begin(GPS_9600);
     delay(100); // Little delay before flushing.
     softSerial.flush();
-    Serial.println("BAUDRATE 57600");
+    Serial.println("GPS BAUDRATE 57600");
     BaudRate57600();
     delay(100); // Little delay before flushing.
     softSerial.flush(); 
-    softSerial.begin(NEW_GPS_BAUDRATE);
+    softSerial.begin(GPS_57600);
     delay(100); // Little delay before flushing.
     softSerial.flush(); 
     
