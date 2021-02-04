@@ -13,7 +13,7 @@
  *  32 UBX Protocol p168 ->  https://www.u-blox.com/sites/default/files/products/documents/u-blox8-M8_ReceiverDescrProtSpec_%28UBX-13003221%29.pdf
  *
  * Notes : 
- * La mise à jour d'un écran de paramètres affichés par u-center met au moins 10 à 20 secondes avant d'être rafraichie, 
+ * La mise à jour d'un écran de paramètres affichés par u-center grâce à la touche Poll : 
  * le titre du message choisi, dans la colonne de gauche, change brièvement de couleur quand il est mis à jour. 
  * 
  * La configuration n'est pas sauvegardée dans la flash, le but est de mettre au point une séquence de configuration
