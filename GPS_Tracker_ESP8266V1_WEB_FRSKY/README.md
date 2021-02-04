@@ -20,7 +20,7 @@ En STAT
 
 En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra afficher facilement les coordonnées GPS, le HDOP, le nombre de SAT et le STATUS
 
-<img src="Capture Balise.PNG" width = "500">
+<img src="Capture Balise0_censored.jpg" width = "500">
 
 on le trouve ici https://github.com/dev-fred/GPS_Tracker_ESP8266/blob/main/GPS_Tracker_ESP8266V1_WEB_FRSKY/WIDGETS.zip
 
