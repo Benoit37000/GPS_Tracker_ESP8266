@@ -118,6 +118,32 @@ uint64_t gpsSec = 0;
 uint64_t beaconSec = 0;
 int nb_sat = 0;
 
+void SelectChannels()
+{
+// CFG-GNSS packet GPS + Galileo + Glonas  
+ byte packet[] = {0xB5, 0x62, 0x06, 0x3E, 0x3C, 0x00, 0x00, 0x00, 0x20, 0x07, 0x00, 0x08, 0x10, 0x00,
+                  0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x03, 0x00, 0x00, 0x00, 0x01, 0x01, 0x02, 0x04,
+                  0x08, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x08, 0x10, 0x00, 0x00, 0x00, 0x01, 0x01,
+                  0x04, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x01, 0x05, 0x00, 0x03, 0x00, 0x00, 0x00,
+                  0x01, 0x01, 0x06, 0x08, 0x0E, 0x00, 0x01, 0x00, 0x01, 0x01, 0x2E, 0x75};
+ sendPacket(packet, sizeof(packet));    
+}
+
+void Rate500()
+{     
+  byte packet[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xF4, 0x01, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x77};
+    sendPacket(packet, sizeof(packet));
+}
+
+// Send the packet specified to the receiver.
+void sendPacket(byte *packet, byte len)
+{
+    for (byte i = 0; i < len; i++)
+    {
+        softSerial.write(packet[i]);
+    }
+}
+
 void setup() {
   // start serial
   Serial.begin(115200);
@@ -153,7 +179,21 @@ void setup() {
   Serial.println();
 
   softSerial.begin(GPS_BAUD_RATE);
- 
+    
+//-------Configure GPS ublox
+    delay(100); // Little delay before flushing.
+    softSerial.flush();
+//-------Config RATE = 500 ms
+    Serial.println("Configure GPS RATE = 500 ms");
+    Rate500();
+    delay(100); // Little delay before flushing.
+    softSerial.flush();
+    //--------Config CHANNELS 
+    Serial.println("Configure GPS CHANNELS = GPS + Galileo + Glonas");   
+    SelectChannels();
+    delay(100); // Little delay before flushing.
+    softSerial.flush();
+     								
   drone_idfr.set_drone_id(drone_id); 
 
   delay(5000);
