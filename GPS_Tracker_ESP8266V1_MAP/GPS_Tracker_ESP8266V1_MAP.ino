@@ -86,9 +86,10 @@ int led ;
 bool Wconnected=false;
 bool unefois=true;
 
-#define GPS_BAUD_RATE 9600  // Valeur par défaut
-#define GPS_RX_PIN 5       // Brancher le fil Tx du GPS
-#define GPS_TX_PIN 4       // Brancher le fil Rx du GPS
+#define GPS_BAUDRATE 9600      // Valeur par défaut
+#define NEW_GPS_BAUDRATE 57600  //Config final du GPS
+#define GPS_RX_PIN 5            // Brancher le fil Tx du GPS
+#define GPS_TX_PIN 4            // Brancher le fil Rx du GPS
 
 SoftwareSerial softSerial(GPS_RX_PIN, GPS_TX_PIN);
 TinyGPSPlus gps;
@@ -170,6 +171,44 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
   }
 }
 
+void SelectChannels()
+{
+  // CFG-GNSS packet GPS + Galileo + Glonas  
+  byte packet[] = {0xB5, 0x62, 0x06, 0x3E, 0x3C, 0x00, 0x00, 0x00, 0x20, 0x07, 0x00, 0x08, 0x10, 0x00,
+    0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x03, 0x00, 0x00, 0x00, 0x01, 0x01, 0x02, 0x04,
+    0x08, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x08, 0x10, 0x00, 0x00, 0x00, 0x01, 0x01,
+    0x04, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x01, 0x05, 0x00, 0x03, 0x00, 0x00, 0x00,
+  0x01, 0x01, 0x06, 0x08, 0x0E, 0x00, 0x01, 0x00, 0x01, 0x01, 0x2E, 0x75};
+  sendPacket(packet, sizeof(packet));    
+}
+
+void BaudRate9600()
+{
+    byte packet[] = {0xB5,0x62, 0x06,0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x08, 0x00, 0x00, 0x80, 0x25, 0x00, 0x00, 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA2, 0xB5};
+    sendPacket(packet, sizeof(packet));
+}
+
+void BaudRate57600()
+{
+    byte packet[] = {0xB5,0x62, 0x06, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x08, 0x00, 0x00, 0x00, 0xE1, 0x00, 0x00, 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xDE, 0xC9};
+    sendPacket(packet, sizeof(packet));
+}
+
+void Rate500()
+{     
+  byte packet[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xF4, 0x01, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x77};
+    sendPacket(packet, sizeof(packet));
+}
+
+// Send the packet specified to the receiver.
+void sendPacket(byte *packet, byte len)
+{
+    for (byte i = 0; i < len; i++)
+    {
+        softSerial.write(packet[i]);
+  }
+}
+
 void setup()
 {
   
@@ -184,7 +223,7 @@ void setup()
     delay(1000);
   }
     
-//connection sur le terrain à un smartphone
+  //connection sur le terrain à un smartphone
     // start WiFi
     WiFi.mode(WIFI_AP);
     //conversion de l'adresse mac:
@@ -210,12 +249,47 @@ void setup()
     
     current_config.beacon_interval = 1000;
     wifi_softap_set_config(&current_config);
-   
+  
   beginServer(); //lancement du server WEB
   webSocket.begin();
   webSocket.onEvent(webSocketEvent);
-  
-  softSerial.begin(GPS_BAUD_RATE);
+
+  //--------------------------------------------- 57600 ->BAUDRATE 9600
+    softSerial.begin(NEW_GPS_BAUDRATE);
+    delay(100); // Little delay before flushing.
+    softSerial.flush();
+    Serial.println("BAUDRATE 9600");
+    BaudRate9600();
+    delay(100); // Little delay before flushing.
+    softSerial.flush(); 
+    softSerial.begin(GPS_BAUDRATE);
+    delay(100); // Little delay before flushing.
+    softSerial.flush();   
+//--------------------------------------------- 9600 ->BAUDRATE 57600
+    softSerial.begin(GPS_BAUDRATE);
+    delay(100); // Little delay before flushing.
+    softSerial.flush();
+    Serial.println("BAUDRATE 57600");
+    BaudRate57600();
+    delay(100); // Little delay before flushing.
+    softSerial.flush(); 
+    softSerial.begin(NEW_GPS_BAUDRATE);
+    delay(100); // Little delay before flushing.
+    softSerial.flush(); 
+    
+  //-------Configure GPS ublox
+  delay(100); // Little delay before flushing.
+  softSerial.flush();
+  //-------Config RATE = 500 ms
+  Serial.println("Configure GPS RATE = 500 ms");
+  Rate500();
+  delay(100); // Little delay before flushing.
+  softSerial.flush();
+  //--------Config CHANNELS 
+  Serial.println("Configure GPS CHANNELS = GPS + Galileo + Glonas");   
+  SelectChannels();
+  delay(100); // Little delay before flushing.
+  softSerial.flush();               
   
   drone_idfr.set_drone_id(drone_id);
   delay(5000);
@@ -274,8 +348,8 @@ void loop()
     }
     return;
     } else if (gps.location.age()> 3000) {
-      Serial.println("NO SAT");
-      strncpy(buff[8], "NO SAT", sizeof(buff[8]));
+    Serial.println("NO SAT");
+    strncpy(buff[8], "NO SAT", sizeof(buff[8]));
     return;
     } else if (gps.location.isUpdated() && gps.altitude.isUpdated() && gps.course.isUpdated() && gps.speed.isUpdated()){
     // On traite le cas où la position GPS est valide.
@@ -284,13 +358,13 @@ void loop()
       nb_sat = gps.satellites.value();
       Serial.print("NEW SAT=");  Serial.println(nb_sat);
       strncpy(buff[8], "+SAT", sizeof(buff[8]));
-      }
+    }
     if ( gps.satellites.value() < nb_sat ) {//- de satellites
       nb_sat = gps.satellites.value();
       Serial.print("LOST SAT=");  Serial.println(nb_sat);
       strncpy(buff[8], "-SAT", sizeof(buff[8]));
-      }
-      
+    }
+    
     if (!drone_idfr.has_home_set() && gps.satellites.value() > limite_sat && gps.hdop.hdop() < limite_hdop) {    
       Serial.println("Setting Home Position");
       HLat=gps.location.lat(); HLng=gps.location.lng();
@@ -303,7 +377,7 @@ void loop()
       counter++;  
       Cmd = 'H';
       snprintf(CHomeLonLat, sizeof(CHomeLonLat), "%d,%.4f,%.4f,%c",counter,HLng,HLat,Cmd);
-//    webSocket.sendTXT(0,CHomeLonLat); à faire ultérieument quand Wsocket est connecté ou a refaire apres une deconnection
+      //    webSocket.sendTXT(0,CHomeLonLat); à faire ultérieument quand Wsocket est connecté ou a refaire apres une deconnection
     }
     
     // On actualise les données GPS de la librairie d'identification drone.
@@ -333,12 +407,12 @@ void loop()
     Serial.println(buff[7]);*/
     
     //*************************************************************
-   
+    
   }   
     //Popup Départ sur la carte avec recentrage + balise rouge
     if (drone_idfr.has_home_set() && Wconnected && unefois ){ webSocket.sendTXT(0,CHomeLonLat);
     unefois = false;
-    }
+  }
     
     
     /**
@@ -347,7 +421,7 @@ void loop()
     *  - soit si le drone s'est déplacé de 30m,
     *  - uniquement si la position Home est déjà définie,
     *  - et dans le cas où les données GPS sont nouvelles.
-    */       
+  */       
     if (drone_idfr.has_home_set() && drone_idfr.time_to_send()) {
     float time_elapsed = (float(millis() - beaconSec) / 1000); 
     beaconSec = millis();
@@ -385,17 +459,17 @@ void loop()
     snprintf(CLonLat, sizeof(CLonLat), "%d,%.4f,%.4f,%c",counter,gps.location.lng(),gps.location.lat(),Cmd);
     webSocket.sendTXT(0,CLonLat);
     //Serial.print("Socket: ");Serial.println(CLonLat);
-     
+    
     //incrementation compteur de trame de balise envoyé
     TRBcounter++; 
     snprintf(buff[9], sizeof(buff[9]), "TRAME:%u", TRBcounter); 
-
+    
     _secondes = millis()/1000; //convect millisecondes en secondes
     _minutes=_secondes/60; //convertir secondes en minutes
     _heures=_minutes/60; //convertir minutes en heures
     _secondes=_secondes-(_minutes*60); // soustraire les secondes converties afin d'afficher 59 secondes max
     _minutes=_minutes-(_heures*60);    //soustraire les minutes converties afin d'afficher 59 minutes max
-
+    
     snprintf(buff[13], sizeof(buff[13]), " %dmn:%ds",_minutes, _secondes );
     
     /**
