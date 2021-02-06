@@ -387,8 +387,8 @@ void loop()
     snprintf(buff[1], sizeof(buff[1]), "UTC:%d:%d:%d",H,MN,S);
     _sat = gps.satellites.value(); if (_sat < limite_sat){snprintf(buff[2], sizeof(buff[2]), "--SAT:%u", _sat);}else{snprintf(buff[2], sizeof(buff[2]), "SAT:%u", _sat);}
     _hdop = gps.hdop.hdop(); if (_hdop > limite_hdop){ snprintf(buff[3], sizeof(buff[3]), "++HDOP:%.2f", _hdop);}else{snprintf(buff[3], sizeof(buff[3]), "HDOP:%.2f", _hdop);}
-    snprintf(buff[4], sizeof(buff[4]), "LNG:%.4f", GPS[1]);
-    snprintf(buff[5], sizeof(buff[5]), "LAT:%.4f", GPS[2]);
+    snprintf(buff[4], sizeof(buff[4]), "LNG:%.4f", GPS[2]);
+    snprintf(buff[5], sizeof(buff[5]), "LAT:%.4f", GPS[1]);
     snprintf(buff[6], sizeof(buff[6]), "ALT:%.2f", GPS[3]-altitude_ref);
     snprintf(buff[7], sizeof(buff[7]), "VMAX(km/h):%.2f", float (VMAX*3.6));
     
