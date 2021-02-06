@@ -256,7 +256,8 @@ void setup()
     delay(100); // Little delay before flushing.
     softSerial.flush();   
   
-    drone_idfr.set_drone_id(drone_id);  
+    drone_idfr.set_drone_id(drone_id);
+    snprintf(buff[0], sizeof(buff[0]), "ID:%s", drone_id); // on aura tout de suite l'info  
     delay(5000);
   
     //built in blue LED -> change d'état à chaque envoi de trame
@@ -380,7 +381,6 @@ void loop()
     //*******************************************************************
     //Calcul VMAX et renseigne les datas de la page WEB
     if (VMAX < GPS[5]){VMAX = GPS[5];} 
-    snprintf(buff[0], sizeof(buff[0]), "ID:%s", drone_id);
     H = gps.time.hour();
     MN = gps.time.minute();   
     S = gps.time.second();  

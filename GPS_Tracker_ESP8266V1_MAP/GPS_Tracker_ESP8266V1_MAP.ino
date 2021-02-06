@@ -292,6 +292,7 @@ void setup()
   softSerial.flush();               
   
   drone_idfr.set_drone_id(drone_id);
+  snprintf(buff[0], sizeof(buff[0]), "ID:%s", drone_id); // on aura tout de suite l'info
   delay(5000);
   
   //built in blue LED -> change d'état à chaque envoi de trame
@@ -388,7 +389,6 @@ void loop()
     //**************************************************************************
     //Calcul VMAX et renseigne les datas de la page WEB
     if (VMAX < gps.speed.mps()){VMAX = gps.speed.mps();} 
-    snprintf(buff[0], sizeof(buff[0]), "ID:%s", drone_id);  
     snprintf(buff[1], sizeof(buff[1]), "UTC:%d:%d:%d", gps.time.hour(), gps.time.minute(), gps.time.second());
     _sat = gps.satellites.value(); if (_sat < limite_sat){snprintf(buff[2], sizeof(buff[2]), "--SAT:%u", _sat);}else{snprintf(buff[2], sizeof(buff[2]), "SAT:%u", _sat);}
     _hdop = gps.hdop.hdop(); if (_hdop > limite_hdop){ snprintf(buff[3], sizeof(buff[3]), "++HDOP:%.2f", _hdop);}else{snprintf(buff[3], sizeof(buff[3]), "HDOP:%.2f", _hdop);}
