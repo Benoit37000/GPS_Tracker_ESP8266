@@ -4,23 +4,23 @@ La base est la même que le projet https://github.com/dev-fred/GPS_Tracker_ESP82
 
 Sur la Radio après la découvertes des capteurs
 
-<img src="screen-211006.bmp" width = "300">
+<img src="img/screen-211006.bmp" width = "300">
 
 Il suffira de renommer 0860 en HDOP et de mettre une Précision de 0.00 et de renommer 0870 en SAT
 
-<img src="screen-211200.bmp" width = "300">
+<img src="img/screen-211200.bmp" width = "300">
 
 Et de renommer 0880
 
-<img src="screen-2021-02-01-194948.bmp" width = "300">"
+<img src="img/screen-2021-02-01-194948.bmp" width = "300">"
 
 En STAT
 
-<img src="screen-2021-02-01-195046.bmp" width = "300">
+<img src="img/screen-2021-02-01-195046.bmp" width = "300">
 
 En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra afficher facilement les coordonnées GPS, le HDOP, le nombre de SAT et le STATUS
 
-<img src="Capture Balise0_censored.jpg" width = "500">
+<img src="img/Capture Balise0_censored.jpg" width = "500">
 
 on le trouve ici https://github.com/dev-fred/GPS_Tracker_ESP8266/blob/main/GPS_Tracker_ESP8266V1_WEB_FRSKY/WIDGETS.zip
 
@@ -29,5 +29,5 @@ Cette version ne peut pas utiliser la fonction delay() dans la boucle principal 
 
 ## Câblage
 
-<img src="cablage2.png" width = "500">
+<img src="img/cablage2.png" width = "500">
 
