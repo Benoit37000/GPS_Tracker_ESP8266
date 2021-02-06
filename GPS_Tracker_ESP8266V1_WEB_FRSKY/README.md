@@ -12,11 +12,11 @@ Il suffira de renommer 0860 en HDOP et de mettre une Précision de 0.00 et de re
 
 Et de renommer 0880
 
-<img src="img/screen-2021-02-01-194948.bmp" width = "300">"
+<img src="img/screen-2021-02-01-194948.jpg" width = "300">"
 
 En STAT
 
-<img src="img/screen-2021-02-01-195046.bmp" width = "300">
+<img src="img/screen-2021-02-01-195046.jpg" width = "300">
 
 En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra afficher facilement les coordonnées GPS, le HDOP, le nombre de SAT et le STATUS
 
