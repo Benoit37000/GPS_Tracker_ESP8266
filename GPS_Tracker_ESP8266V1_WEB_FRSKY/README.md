@@ -17,11 +17,13 @@ En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra affic
 
 <img src="img/Capture Balise0_censored.jpg" width = "500">
 
-# Apport du projet moschotto
-https://github.com/moschotto/OpenTX_GPS_Telemetry adapté pour fonctionner avec GPS_Tracker_ESP8266V1_WEB_FRSKY
+# Adaptation du projet moschotto
+https://github.com/moschotto/OpenTX_GPS_Telemetry  
 
-## Note
-La phase découverte et renommage des capteurs est identique
+En plus du statut de la balise, il affiche la distance par rapport au point de Départ, la distance du trajet parcourue et il enregistre le parcourt dans le fichier LOGS/GPSpositions.txt
+
+### Note
+La phase découverte et le renommage des capteurs est identique
 
 ## Radios with 480x272 pixel displays (X10/T16/TX16/T18)
 
