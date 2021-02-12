@@ -17,28 +17,32 @@ En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra affic
 
 <img src="img/Capture Balise0_censored.jpg" width = "500">
 
-Apport du projet https://github.com/moschotto/OpenTX_GPS_Telemetry adapté pour fonctionner avec GPS_Tracker_ESP8266V1_WEB_FRSKY
+# Apport du projet moschotto
+https://github.com/moschotto/OpenTX_GPS_Telemetry adapté pour fonctionner avec GPS_Tracker_ESP8266V1_WEB_FRSKY
 
 ## Note
 La phase découverte et renommage des capteurs est identique
 
-# Radios with 480x272 pixel displays (X10/T16/TX16/T18)
+## Radios with 480x272 pixel displays (X10/T16/TX16/T18)
 
 <img src="img/X10_censored.jpg" width = "500">
+
 - Copier le contenu de X10.zip sur la carte SD
 - Choisir le Widget GPS, il occupe 1/2 écran
 - GPSviewerT16 s'execute depuis la page OUTILS
 
-# Radios with 212x64 pixel displays (X9D/X9D+/X9E)
+## Radios with 212x64 pixel displays (X9D/X9D+/X9E)
 
 <img src="img/X9_censored.jpg" width = "500">
+
 - Copier le contenu de X9.zip sur la carte SD
 - Configurer la page AFFICHAGE/Ecran x Script GPSx9 
 - GPSviewerX9 s'execute depuis la page OUTILS
 
-# Radios with 128x64 pixel displays (X7/X9 Lite/X-Lite)
+## Radios with 128x64 pixel displays (X7/X9 Lite/X-Lite)
 
 <img src="img/X7.png" width = "500">
+
 - Copier le contenu de X7.zip sur la carte SD
 - Dans la page AFFICHAGE/Ecran x Script GPSx9L 
 - GPSviewerX9L s'execute depuis la page OUTILS
