@@ -15,6 +15,9 @@ Il suffira de renommer
 
 En ajoutant le Widget Balise contenu dans le fichier WIDGETS.zip on pourra afficher facilement les coordonnées GPS, le HDOP, le nombre de SAT et le STATUS
 
+### Note
+Ce Widget utilise 1/4 d'écran et permet de conserver les sliders.
+
 <img src="img/Capture Balise0_censored.jpg" width = "500">
 
 # Adaptation du projet moschotto
