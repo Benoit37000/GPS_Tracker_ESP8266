@@ -6,15 +6,10 @@ Sur la Radio après la découvertes des capteurs
 
 <img src="img/screen-211006.bmp" width = "300">
 
-Il suffira de renommer 0860 en HDOP et de mettre une Précision de 0.00 et de renommer 0870 en SAT
-
-<img src="img/screen-211200.bmp" width = "300">
-
-Et de renommer 0880
-
-<img src="img/screen-2021-02-01-194948.jpg" width = "300">"
-
-En STAT
+Il suffira de renommer 
+- 0860 en HDOP et de mettre une Précision de 0.00 
+- 0870 en SAT
+- 0880 en STAT
 
 <img src="img/screen-2021-02-01-195046.jpg" width = "300">
 
