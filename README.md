@@ -68,10 +68,9 @@ Ajoute un serveur WEB dans la balise qui permet de recevoir en même temps que l
 
 ### [Code](GPS_Tracker_ESP8266V1_WEB_FRSKY)
 
-Battit au dessus de GPS_Tracker_ESP8266V1_WEB, cette version ajoute une sortie FRSKY S.port sur le connecteur JR d'alimentation afin d'envoyer les données du GPS de la balise à un récepteur FRSKY.
+Battit au dessus de GPS_Tracker_ESP8266V1_WEB, cette version ajoute une sortie FRSKY S.port sur le connecteur JR d'alimentation afin d'envoyer les données du GPS de la balise à un récepteur FRSKY via la télémétrie que l'on pourra afficher avec un script LUA.
 
-
-<img src="GPS_Tracker_ESP8266V1_WEB_FRSKY/img/Capture5.PNG" width = "800">
+<img src="GPS_Tracker_ESP8266V1_WEB_FRSKY/img/Capture Balise0_censored.jpg" width = "600">
 
 # GPS_Tracker_ESP8266V1_MAP
 
