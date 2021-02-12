@@ -23,7 +23,7 @@ https://github.com/moschotto/OpenTX_GPS_Telemetry
 En plus du statut de la balise, il affiche la distance par rapport au point de Départ, la distance du trajet parcourue et il enregistre le parcourt dans le fichier LOGS/GPSpositions.txt
 
 ### Note
-La phase découverte et le renommage des capteurs est identique
+La phase découverte et le renommage des capteurs sont identiques
 
 ## Radios with 480x272 pixel displays (X10/T16/TX16/T18)
 
