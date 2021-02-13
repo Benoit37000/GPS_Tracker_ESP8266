@@ -13,7 +13,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 /*------------------------------------------------------------------------------
-  02/02/2021
+  13/02/2021
   Author: Fred.Dev
   Platforms: ESP8266
   Language: C++/Arduino
@@ -22,6 +22,9 @@
   https://github.com/f5soh/balise_esp32/blob/master/droneID_FR.h (version 1 https://discuss.ardupilot.org/t/open-source-french-drone-identification/56904/98 )
   https://github.com/f5soh/balise_esp32
   FrSkySportTelemetry https://www.rcgroups.com/forums/showthread.php?2245978-FrSky-S-Port-telemetry-library-easy-to-use-and-configurable
+
+  -Add VMAX
+  -Add GPS rate 6Hz/166ms Baudrate 57600
   
 ------------------------------------------------------------------------------*/
 //Frsky telemetry
@@ -175,9 +178,15 @@ void BaudRate9600()
     sendPacket(packet, sizeof(packet));
 }
 
-void Rate500()
-{     
-  byte packet[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xF4, 0x01, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x77};
+void BaudRate57600()
+{
+    byte packet[] = {0xB5,0x62, 0x06, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x08, 0x00, 0x00, 0x00, 0xE1, 0x00, 0x00, 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xDE, 0xC9};
+    sendPacket(packet, sizeof(packet));
+}
+
+void Rate166()
+{
+    byte packet[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xA6, 0x00, 0x01, 0x00, 0x01, 0x00, 0xBC, 0x9E};
     sendPacket(packet, sizeof(packet));
 }
 
@@ -245,21 +254,36 @@ void setup()
     softSerial.begin(GPS_9600);
     delay(100); // Little delay before flushing.
     softSerial.flush();
-//-------Config RATE = 500 ms
-    Serial.println("Configure GPS RATE = 500 ms");
-    Rate500();
+//--------------------------------------------- 9600 ->BAUDRATE 57600
+    softSerial.begin(GPS_9600);
+    delay(100); // Little delay before flushing.
+    softSerial.flush();
+    Serial.println("GPS BAUDRATE 57600");
+    BaudRate57600();
+    delay(100); // Little delay before flushing.
+    softSerial.flush(); 
+    softSerial.begin(GPS_57600);
+    delay(100); // Little delay before flushing.
+    softSerial.flush(); 
+    
+//-------Configure GPS ublox
+    delay(100); // Little delay before flushing.
+    softSerial.flush();    
+//-------Config RATE = 166 ms/6Hz
+    Serial.println("Configure GPS RATE = 6 Hz/166 ms");
+    Rate166();
     delay(100); // Little delay before flushing.
     softSerial.flush();
     //--------Config CHANNELS 
     Serial.println("Configure GPS CHANNELS = GPS + Galileo + Glonas");   
     SelectChannels();
     delay(100); // Little delay before flushing.
-    softSerial.flush();   
-  
+    softSerial.flush();
+	
     drone_idfr.set_drone_id(drone_id);
-    snprintf(buff[0], sizeof(buff[0]), "ID:%s", drone_id); // on aura tout de suite l'info  
+    snprintf(buff[0], sizeof(buff[0]), "ID:%s", drone_id);  
     delay(5000);
-  
+    
     //built in blue LED -> change d'état à chaque envoi de trame
     pinMode(led_pin, OUTPUT);
 }
@@ -286,7 +310,7 @@ float _hdop = 0.0;
 unsigned int _sat = 0;
 float GPS[6];
 uint8_t Y=0,M=0,D=0,H=0,MN=0,S=0;
-uint8_t stat = 0;//status télémètrie
+uint8_t stat = 0;//status télémétrie
 
 /* Status Widget Balise
  *  [0]  = "NO STAT",
@@ -307,7 +331,8 @@ void loop()
   H,MN,S,                         // Time (hour, minute, second) - will be affected by timezone setings in your radio
   gps.hdop.hdop(),                // Hdop  
   gps.satellites.value(),         // nb satellite
-  stat);                          // Status
+  stat,                           // Status
+  VMAX);                          // VMAX
   //envoi telemetrie
   telemetry.send(); 
   

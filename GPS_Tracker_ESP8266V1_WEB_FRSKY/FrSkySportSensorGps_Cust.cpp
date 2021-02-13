@@ -8,7 +8,7 @@
 
 FrSkySportSensorGps_Cust::FrSkySportSensorGps_Cust(SensorId id) : FrSkySportSensor(id) { }
 
-void FrSkySportSensorGps_Cust::setData(float lat, float lon, float alt, float speed, float cog, uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, float hdop, uint8_t sat, uint8_t stat)
+void FrSkySportSensorGps_Cust::setData(float lat, float lon, float alt, float speed, float cog, uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second, float hdop, uint8_t sat, uint8_t stat, float vmax)
 {
   latData = setLatLon(lat, true);
   lonData = setLatLon(lon, false);
@@ -20,6 +20,7 @@ void FrSkySportSensorGps_Cust::setData(float lat, float lon, float alt, float sp
   hdopData = hdop * 100;
   satData = sat;
   statData = stat;
+  vmaxData = vmax * 360.0; // Convert m/s en km/h
 }
 
 uint32_t FrSkySportSensorGps_Cust::setLatLon(float latLon, bool isLat)
@@ -180,7 +181,20 @@ uint16_t FrSkySportSensorGps_Cust::send(FrSkySportSingleWireSerial& serial, uint
           serial.sendEmpty(dataId);
           dataId = SENSOR_EMPTY_DATA_ID;
         }
-        break;                        
+        break; 
+      case 10:
+        dataId = GPS_VMAX_DATA_ID;
+        if(now > vmaxTime)
+        {
+          vmaxTime = now + GPS_VMAX_DATA_PERIOD;
+          serial.sendData(dataId,vmaxData);
+        }
+        else
+        {
+          serial.sendEmpty(dataId);
+          dataId = SENSOR_EMPTY_DATA_ID;
+        }
+        break;                                   
     }
     sensorDataIdx++;
     if(sensorDataIdx >= GPS_DATA_COUNT) sensorDataIdx = 0;
@@ -232,7 +246,10 @@ uint16_t FrSkySportSensorGps_Cust::decodeData(uint8_t id, uint16_t appId, uint32
         return appId;
       case GPS_STAT_DATA_ID:
         stat = data;
-        return appId;            
+        return appId; 
+      case GPS_VMAX_DATA_ID:
+        vmax = data; 
+        return appId;                            
     }
   }
   return SENSOR_NO_DATA_ID;
@@ -252,3 +269,4 @@ uint8_t FrSkySportSensorGps_Cust::getSecond() { return second; }
 float FrSkySportSensorGps_Cust::getHdop() { return hdop; }
 uint8_t FrSkySportSensorGps_Cust::getSat() { return sat; }
 uint8_t FrSkySportSensorGps_Cust::getStat() { return stat; }
+float FrSkySportSensorGps_Cust::getVmax() { return vmax ; }
