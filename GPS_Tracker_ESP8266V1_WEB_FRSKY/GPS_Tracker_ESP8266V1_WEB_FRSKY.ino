@@ -234,6 +234,7 @@ void setup()
     Serial.println("Started \\o/");
     Serial.print("IP page WEB: ");Serial.println(local_ip);
     Serial.print("ID Drone: ");Serial.println(drone_id);
+    WiFi.printDiag(Serial);
     
     softap_config current_config;
     wifi_softap_get_config(&current_config);
