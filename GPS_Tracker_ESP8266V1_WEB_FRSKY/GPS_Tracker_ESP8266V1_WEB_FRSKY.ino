@@ -384,6 +384,7 @@ void loop()
       snprintf(buff[11], sizeof(buff[11]), "DLNG:%.4f", HLng);
       snprintf(buff[12], sizeof(buff[12]), "DLAT:%.4f", HLat);
       strncpy(buff[10], "DEPART", sizeof(buff[10]));
+      VMAX=0;
       stat = 3; //"PRET"
       D = gps.date.day();
       M = gps.date.month();   
