@@ -248,7 +248,7 @@ uint16_t FrSkySportSensorGps_Cust::decodeData(uint8_t id, uint16_t appId, uint32
         stat = data;
         return appId; 
       case GPS_VMAX_DATA_ID:
-        vmax = data; 
+        vmax = data/360.0; // Convert km/h en m/s
         return appId;                            
     }
   }
