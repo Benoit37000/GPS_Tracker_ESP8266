@@ -12,7 +12,7 @@ Il suffira de renommer
 - 0860 en HDOP et de mettre une Précision de 0.00 
 - 0870 en SAT
 - 0880 en STAT
-- 0890 en VMAX
+- 0890 en VMAX (qui est en km/h et que l'on peut afficher avec le widget Value ou depuis la page WEB)
 
 <img src="img/screen-2021-02-01-195046.jpg" width = "300">
 
