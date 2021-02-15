@@ -1,6 +1,9 @@
 <img src="img/Balise-S6R.PNG" width = "400">
 
-Cette version s'appui sur la librairie de PawelSky https://www.rcgroups.com/forums/showatt.php?attachmentid=14504485&d=1610286712 à copier sous libraries 
+Cette version s'appuie sur la librairie de PawelSky https://www.rcgroups.com/forums/showatt.php?attachmentid=14504485&d=1610286712 à installer dans libraries : 
+- Charger le fichier FrSkySportTelemetry_20210110.zip : Croquis-> Inclure une bibliothèque -> Ajouter la bibliothèque .ZIP
+- Vérifier que libraries contient le répertoire FrSkySportTelemetry 
+- Allez dans Fichier-> Préférences -> Emplacement du carnet de croquis, c'est au bout de ce chemin que se trouve le répertoire libraries
 
 La base est la même que le projet https://github.com/dev-fred/GPS_Tracker_ESP8266/tree/main/GPS_Tracker_ESP8266V1_WEB pour la compilation et la partie smartphone.
 
