@@ -1,10 +1,13 @@
 <img src="img/Balise-S6R.PNG" width = "400">
 
-Cette version s'appui sur la librairie de PawelSky https://www.rcgroups.com/forums/showatt.php?attachmentid=14504485&d=1610286712 à copier sous libraries 
+Cette version s'appuie sur la librairie de PawelSky https://www.rcgroups.com/forums/showatt.php?attachmentid=14504485&d=1610286712 à installer dans libraries: 
+- Charger le fichier FrSkySportTelemetry_20210110.zip : Croquis-> Inclure une bibliothèque -> Ajouter la bibliothèque .ZIP
+- Vérifier que libraries contient le répertoire FrSkySportTelemetry 
+- Allez dans Fichier-> Préférences -> Emplacement du carnet de croquis: c'est au bout de ce chemin que se trouve le répertoire libraries
 
 La base est la même que le projet https://github.com/dev-fred/GPS_Tracker_ESP8266/tree/main/GPS_Tracker_ESP8266V1_WEB pour la compilation et la partie smartphone.
 
-Sur la Radio après la découvertes des capteurs
+Sur la Radio après la découverte des capteurs
 
 <img src="img/screen-211006.bmp" width = "300">
 
@@ -12,7 +15,7 @@ Il suffira de renommer
 - 0860 en HDOP et de mettre une Précision de 0.00 
 - 0870 en SAT
 - 0880 en STAT
-- 0890 en VMAX
+- 0890 en VMAX et de mettre une Précision de 0.00 (est en km/h et on peut l'afficher avec le widget Value ou depuis la page WEB de la balise)
 
 <img src="img/screen-2021-02-01-195046.jpg" width = "300">
 
