@@ -77,14 +77,5 @@ Le gros avantage c’est la réception des infos GPS à travers la télémétrie
 
 # GPS_Tracker_ESP8266V1_MAP
 
-### [Code](GPS_Tracker_ESP8266V1_MAP)
-
-Battit au dessus de GPS_Tracker_ESP8266V1_WEB, cette version permet l'affichage d'une carte utilisant Open Street Map, un projet ayant le but de créer une carte libre du monde et Leaflet, une bibliothèque Javascript open-source.
-Elle est plus délicate à faire fonctionner sur un smartphone que la version GPS_Tracker_ESP8266V1_WEB.
-En effet il faut que le téléphone mobile soit capable de gérer une double connection : sur l'internet via la 4G pour charger la carte ET sur la balise pour recueillir les données GPS. 
-Elle tourne sur un esp8266 WEMOS D1 mini relié à un GPS BN220 -> carte Wemos D1 R1 et Flash size "4M (FS:none OTA:~1019KB)".
-
-Le bouton **Générer GPX** produit un fichier GPX des couples (Lon, Lat) accumulés.
-
-<img src="GPS_Tracker_ESP8266V1_MAP/img/ecran.png" width = "300">
+Projet retiré, il ne tient pas ses promesses, la portée de la balise est insuffisante.
 
